@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.EmailCodeMapper">
+
+    <resultMap id="BaseResultMap" type="com.easybbs.entity.po.EmailCode">
+            <id property="email" column="email" jdbcType="VARCHAR"/>
+            <id property="code" column="code" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        email,code,create_time,
+        status
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from email_code
+        where  email = #{email,jdbcType=VARCHAR} AND code = #{code,jdbcType=VARCHAR} 
+    </select>
+    <select id="selectByEmailAndCode" resultType="com.easybbs.entity.po.EmailCode">
+        select * from email_code where email = #{email} and code = #{emailCode}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from email_code
+        where  email = #{email,jdbcType=VARCHAR} AND code = #{code,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert">
+        insert into email_code
+        ( email,code,create_time
+        ,status)
+        values (#{email,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
+        ,#{status,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective">
+        insert into email_code
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="email != null">email,</if>
+                <if test="code != null">code,</if>
+                <if test="createTime != null">create_time,</if>
+                <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="email != null">#{email,jdbcType=VARCHAR},</if>
+                <if test="code != null">#{code,jdbcType=VARCHAR},</if>
+                <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+                <if test="status != null">#{status,jdbcType=TINYINT},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.easybbs.entity.po.EmailCode">
+        update email_code
+        <set>
+                <if test="createTime != null">
+                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="status != null">
+                    status = #{status,jdbcType=TINYINT},
+                </if>
+        </set>
+        where   email = #{email,jdbcType=VARCHAR} AND code = #{code,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.easybbs.entity.po.EmailCode">
+        update email_code
+        set 
+            create_time =  #{createTime,jdbcType=TIMESTAMP},
+            status =  #{status,jdbcType=TINYINT}
+        where   email = #{email,jdbcType=VARCHAR} AND code = #{code,jdbcType=VARCHAR} 
+    </update>
+    <update id="disableEmailCode">
+        update email_code set status = 1 where email = #{email,jdbcType=VARCHAR} and status = 0
+    </update>
+</mapper>

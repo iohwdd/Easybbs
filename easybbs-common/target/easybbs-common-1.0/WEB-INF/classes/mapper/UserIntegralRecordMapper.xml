@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.UserIntegralRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.easybbs.entity.po.UserIntegralRecord">
+        <id property="recordId" column="record_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="operType" column="oper_type" jdbcType="TINYINT"/>
+        <result property="integral" column="integral" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        record_id
+        ,user_id,oper_type,
+        integral,create_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_integral_record
+        where record_id = #{recordId,jdbcType=INTEGER}
+    </select>
+    <select id="findByParam" resultType="com.easybbs.entity.po.UserIntegralRecord">
+        select * from user_integral_record
+        <where>
+            <if test="query.userId != null">
+                and user_id = #{query.userId}
+            </if>
+            <if test="query.createTimeStart != null and query.createTimeEnd != null">
+                and create_time between #{query.createTimeStart} and #{query.createTimeEnd}
+            </if>
+            <if test="query.createTimeStart != null and query.createTimeEnd == null">
+                and create_time &gt;= #{query.createTimeStart}
+            </if>
+            <if test="query.createTimeStart == null and query.createTimeEnd != null">
+                and create_time &lt;= #{query.createTimeEnd}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from user_integral_record
+        where record_id = #{recordId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="record_id" keyProperty="recordId"
+            parameterType="com.easybbs.entity.po.UserIntegralRecord" useGeneratedKeys="true">
+        insert into user_integral_record
+        ( record_id, user_id, oper_type
+        , integral, create_time)
+        values ( #{recordId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{operType,jdbcType=TINYINT}
+               , #{integral,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="record_id" keyProperty="recordId"
+            parameterType="com.easybbs.entity.po.UserIntegralRecord" useGeneratedKeys="true">
+        insert into user_integral_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">record_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="operType != null">oper_type,</if>
+            <if test="integral != null">integral,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">#{recordId,jdbcType=INTEGER},</if>
+            <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+            <if test="operType != null">#{operType,jdbcType=TINYINT},</if>
+            <if test="integral != null">#{integral,jdbcType=INTEGER},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.easybbs.entity.po.UserIntegralRecord">
+        update user_integral_record
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="operType != null">
+                oper_type = #{operType,jdbcType=TINYINT},
+            </if>
+            <if test="integral != null">
+                integral = #{integral,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where record_id = #{recordId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.easybbs.entity.po.UserIntegralRecord">
+        update user_integral_record
+        set user_id     = #{userId,jdbcType=VARCHAR},
+            oper_type   = #{operType,jdbcType=TINYINT},
+            integral    = #{integral,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where record_id = #{recordId,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.UserInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.easybbs.entity.po.UserInfo">
+        <id property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="TINYINT"/>
+        <result property="personDescription" column="person_description" jdbcType="VARCHAR"/>
+        <result property="joinTime" column="join_time" jdbcType="TIMESTAMP"/>
+        <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
+        <result property="lastLoginIp" column="last_login_ip" jdbcType="VARCHAR"/>
+        <result property="lastLoginIpAddress" column="last_login_ip_address" jdbcType="VARCHAR"/>
+        <result property="totalIntegral" column="total_integral" jdbcType="INTEGER"/>
+        <result property="currentIntegral" column="current_integral" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id
+        ,nick_name,email,
+        password,sex,person_description,
+        join_time,last_login_time,last_login_ip,
+        last_login_ip_address,total_integral,current_integral,
+        status
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_info
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from user_info
+        where email = #{email}
+    </select>
+    <select id="selectByNickName" resultType="com.easybbs.entity.po.UserInfo">
+        select *
+        from user_info
+        where nick_name = #{nickName}
+    </select>
+    <select id="getUserByParam" resultType="com.easybbs.entity.po.UserInfo">
+        select * from user_info
+        <where>
+            <if test="query.nickNameFuzzy != null">
+                and nick_name like concat('%',#{query.nickNameFuzzy},'%')
+            </if>
+            <if test="query.sex != null">
+                and sex = #{query.sex}
+            </if>
+            <if test="query.status != null">
+                and status = #{query.status}
+            </if>
+        </where>
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from user_info
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.easybbs.entity.po.UserInfo"
+            useGeneratedKeys="true">
+        insert into user_info
+        ( user_id, nick_name, email
+        , password, sex, person_description
+        , join_time, last_login_time, last_login_ip
+        , last_login_ip_address, total_integral, current_integral
+        , status)
+        values ( #{userId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}
+               , #{password,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, #{personDescription,jdbcType=VARCHAR}
+               , #{joinTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{lastLoginIp,jdbcType=VARCHAR}
+               , #{lastLoginIpAddress,jdbcType=VARCHAR}, #{totalIntegral,jdbcType=INTEGER}
+               , #{currentIntegral,jdbcType=INTEGER}
+               , #{status,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.easybbs.entity.po.UserInfo"
+            useGeneratedKeys="true">
+        insert into user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="nickName != null">nick_name,</if>
+            <if test="email != null">email,</if>
+            <if test="password != null">password,</if>
+            <if test="sex != null">sex,</if>
+            <if test="personDescription != null">person_description,</if>
+            <if test="joinTime != null">join_time,</if>
+            <if test="lastLoginTime != null">last_login_time,</if>
+            <if test="lastLoginIp != null">last_login_ip,</if>
+            <if test="lastLoginIpAddress != null">last_login_ip_address,</if>
+            <if test="totalIntegral != null">total_integral,</if>
+            <if test="currentIntegral != null">current_integral,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+            <if test="nickName != null">#{nickName,jdbcType=VARCHAR},</if>
+            <if test="email != null">#{email,jdbcType=VARCHAR},</if>
+            <if test="password != null">#{password,jdbcType=VARCHAR},</if>
+            <if test="sex != null">#{sex,jdbcType=TINYINT},</if>
+            <if test="personDescription != null">#{personDescription,jdbcType=VARCHAR},</if>
+            <if test="joinTime != null">#{joinTime,jdbcType=TIMESTAMP},</if>
+            <if test="lastLoginTime != null">#{lastLoginTime,jdbcType=TIMESTAMP},</if>
+            <if test="lastLoginIp != null">#{lastLoginIp,jdbcType=VARCHAR},</if>
+            <if test="lastLoginIpAddress != null">#{lastLoginIpAddress,jdbcType=VARCHAR},</if>
+            <if test="totalIntegral != null">#{totalIntegral,jdbcType=INTEGER},</if>
+            <if test="currentIntegral != null">#{currentIntegral,jdbcType=INTEGER},</if>
+            <if test="status != null">#{status,jdbcType=TINYINT},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.easybbs.entity.po.UserInfo">
+        update user_info
+        <set>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="personDescription != null">
+                person_description = #{personDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="joinTime != null">
+                join_time = #{joinTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginIp != null">
+                last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginIpAddress != null">
+                last_login_ip_address = #{lastLoginIpAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="totalIntegral != null">
+                total_integral = #{totalIntegral,jdbcType=INTEGER},
+            </if>
+            <if test="currentIntegral != null">
+                current_integral = #{currentIntegral,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.easybbs.entity.po.UserInfo">
+        update user_info
+        set nick_name             = #{nickName,jdbcType=VARCHAR},
+            email                 = #{email,jdbcType=VARCHAR},
+            password              = #{password,jdbcType=VARCHAR},
+            sex                   = #{sex,jdbcType=TINYINT},
+            person_description    = #{personDescription,jdbcType=VARCHAR},
+            join_time             = #{joinTime,jdbcType=TIMESTAMP},
+            last_login_time       = #{lastLoginTime,jdbcType=TIMESTAMP},
+            last_login_ip         = #{lastLoginIp,jdbcType=VARCHAR},
+            last_login_ip_address = #{lastLoginIpAddress,jdbcType=VARCHAR},
+            total_integral        = #{totalIntegral,jdbcType=INTEGER},
+            current_integral      = #{currentIntegral,jdbcType=INTEGER},
+            status                = #{status,jdbcType=TINYINT}
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateIntegral">
+        update user_info set current_integral = current_integral + #{integral}
+        <if test="integral > 0">
+            ,total_integral = total_integral + #{integral}
+        </if>
+        where user_id = #{userId}
+        <![CDATA[and current_integral + #{integral} >= 0]]>
+    </update>
+    <update id="updateByParam">
+        update user_info
+        <set>
+            <if test="query.status != null">
+                status = #{query.status},
+            </if>
+        </set>
+        where user_id = #{query.userId}
+    </update>
+</mapper>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.ForumCommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.easybbs.entity.po.ForumComment">
+        <id property="commentId" column="comment_id" jdbcType="INTEGER"/>
+        <result property="pCommentId" column="p_comment_id" jdbcType="INTEGER"/>
+        <result property="articleId" column="article_id" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="imgPath" column="img_path" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="userIpAddress" column="user_ip_address" jdbcType="VARCHAR"/>
+        <result property="replyUserId" column="reply_user_id" jdbcType="VARCHAR"/>
+        <result property="replyNickName" column="reply_nick_name" jdbcType="VARCHAR"/>
+        <result property="topType" column="top_type" jdbcType="TINYINT"/>
+        <result property="postTime" column="post_time" jdbcType="TIMESTAMP"/>
+        <result property="goodCount" column="good_count" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        comment_id
+        ,p_comment_id,article_id,
+        content,img_path,user_id,
+        nick_name,user_ip_address,reply_user_id,
+        reply_nick_name,top_type,post_time,
+        good_count,status
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from forum_comment
+        where comment_id = #{commentId,jdbcType=INTEGER}
+    </select>
+    <select id="selectList" resultType="com.easybbs.entity.po.ForumComment">
+        select *
+        <if test="params.queryLikeType != null and params.queryLikeType and params.currentUserId != null">
+            ,(select count(1) from like_record r where r.object_id = c.comment_id and r.user_id =
+            #{params.currentUserId}) as likeType
+        </if>
+        from forum_comment c
+        <where>
+            <if test="params.articleId != null">
+                and article_id = #{params.articleId}
+            </if>
+            <if test="params.pcommentList != null and params.pcommentList.size()>0">
+                and p_comment_id in (<foreach collection="params.pcommentList" item="item" separator=",">#{item}
+            </foreach> )
+            </if>
+            <if test="params.pCommentId != null">
+                and p_comment_id = #{params.pCommentId}
+            </if>
+            <if test="params.userId != null">
+                and user_id = #{params.userId}
+            </if>
+            <if test="params.currentUserId != null">
+                and (status = 1 or (status = 0 and user_id = #{params.currentUserId}))
+            </if>
+            <if test="params.status != null">
+                and status = #{params.status}
+            </if>
+            <if test="params.contentFuzzy != null">
+                and content like concat('%',#{params.contentFuzzy},'%')
+            </if>
+            <if test="params.nickNameFuzzy != null">
+                and nick_name like concat('%',#{params.nickNameFuzzy},'%')
+            </if>
+        </where>
+        <if test="params.orderBy != null">
+            order by ${params.orderBy}
+        </if>
+    </select>
+    <select id="findListByParam" resultType="com.easybbs.entity.po.ForumComment">
+        select * from forum_comment
+        <where>
+            <if test="query.articleId != null">
+                article_id = #{query.articleId}
+            </if>
+            <if test="query.pCommentId != null">
+                p_comment_id = #{query.pCommentId}
+            </if>
+        </where>
+        <if test="query.orderBy != null">
+            order by ${query.orderBy}
+        </if>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from forum_comment
+        where comment_id = #{commentId,jdbcType=INTEGER}
+    </delete>
+    <delete id="delByCommentIds">
+        delete
+        from forum_comment
+        where comment_id in
+        <foreach collection="commentIds" open="(" close=")" separator="," item="commentId">
+            #{commentId}
+        </foreach>
+    </delete>
+    <insert id="insert" keyColumn="comment_id" keyProperty="commentId"
+            parameterType="com.easybbs.entity.po.ForumComment" useGeneratedKeys="true">
+        insert into forum_comment
+        ( comment_id, p_comment_id, article_id
+        , content, img_path, user_id
+        , nick_name, user_ip_address, reply_user_id
+        , reply_nick_name, top_type, post_time
+        , good_count, status)
+        values ( #{commentId,jdbcType=INTEGER}, #{pCommentId,jdbcType=INTEGER}, #{articleId,jdbcType=VARCHAR}
+               , #{content,jdbcType=VARCHAR}, #{imgPath,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}
+               , #{nickName,jdbcType=VARCHAR}, #{userIpAddress,jdbcType=VARCHAR}, #{replyUserId,jdbcType=VARCHAR}
+               , #{replyNickName,jdbcType=VARCHAR}, #{topType,jdbcType=TINYINT}, #{postTime,jdbcType=TIMESTAMP}
+               , #{goodCount,jdbcType=INTEGER}, #{status,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" keyColumn="comment_id" keyProperty="commentId"
+            parameterType="com.easybbs.entity.po.ForumComment" useGeneratedKeys="true">
+        insert into forum_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commentId != null">comment_id,</if>
+            <if test="pCommentId != null">p_comment_id,</if>
+            <if test="articleId != null">article_id,</if>
+            <if test="content != null">content,</if>
+            <if test="imgPath != null">img_path,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="nickName != null">nick_name,</if>
+            <if test="userIpAddress != null">user_ip_address,</if>
+            <if test="replyUserId != null">reply_user_id,</if>
+            <if test="replyNickName != null">reply_nick_name,</if>
+            <if test="topType != null">top_type,</if>
+            <if test="postTime != null">post_time,</if>
+            <if test="goodCount != null">good_count,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commentId != null">#{commentId,jdbcType=INTEGER},</if>
+            <if test="pCommentId != null">#{pCommentId,jdbcType=INTEGER},</if>
+            <if test="articleId != null">#{articleId,jdbcType=VARCHAR},</if>
+            <if test="content != null">#{content,jdbcType=VARCHAR},</if>
+            <if test="imgPath != null">#{imgPath,jdbcType=VARCHAR},</if>
+            <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+            <if test="nickName != null">#{nickName,jdbcType=VARCHAR},</if>
+            <if test="userIpAddress != null">#{userIpAddress,jdbcType=VARCHAR},</if>
+            <if test="replyUserId != null">#{replyUserId,jdbcType=VARCHAR},</if>
+            <if test="replyNickName != null">#{replyNickName,jdbcType=VARCHAR},</if>
+            <if test="topType != null">#{topType,jdbcType=TINYINT},</if>
+            <if test="postTime != null">#{postTime,jdbcType=TIMESTAMP},</if>
+            <if test="goodCount != null">#{goodCount,jdbcType=INTEGER},</if>
+            <if test="status != null">#{status,jdbcType=TINYINT},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.easybbs.entity.po.ForumComment">
+        update forum_comment
+        <set>
+            <if test="pCommentId != null">
+                p_comment_id = #{pCommentId,jdbcType=INTEGER},
+            </if>
+            <if test="articleId != null">
+                article_id = #{articleId,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="imgPath != null">
+                img_path = #{imgPath,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="userIpAddress != null">
+                user_ip_address = #{userIpAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="replyUserId != null">
+                reply_user_id = #{replyUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="replyNickName != null">
+                reply_nick_name = #{replyNickName,jdbcType=VARCHAR},
+            </if>
+            <if test="topType != null">
+                top_type = #{topType,jdbcType=TINYINT},
+            </if>
+            <if test="postTime != null">
+                post_time = #{postTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="goodCount != null">
+                good_count = #{goodCount,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where comment_id = #{commentId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.easybbs.entity.po.ForumComment">
+        update forum_comment
+        set p_comment_id    = #{pCommentId,jdbcType=INTEGER},
+            article_id      = #{articleId,jdbcType=VARCHAR},
+            content         = #{content,jdbcType=VARCHAR},
+            img_path        = #{imgPath,jdbcType=VARCHAR},
+            user_id         = #{userId,jdbcType=VARCHAR},
+            nick_name       = #{nickName,jdbcType=VARCHAR},
+            user_ip_address = #{userIpAddress,jdbcType=VARCHAR},
+            reply_user_id   = #{replyUserId,jdbcType=VARCHAR},
+            reply_nick_name = #{replyNickName,jdbcType=VARCHAR},
+            top_type        = #{topType,jdbcType=TINYINT},
+            post_time       = #{postTime,jdbcType=TIMESTAMP},
+            good_count      = #{goodCount,jdbcType=INTEGER},
+            status          = #{status,jdbcType=TINYINT}
+        where comment_id = #{commentId,jdbcType=INTEGER}
+    </update>
+    <update id="updateCommentGoodCount">
+        update forum_comment
+        set good_count = good_count + #{changeCount}
+        where comment_id = #{commentId}
+    </update>
+    <update id="updateTopTypeByArticleId">
+        update forum_comment
+        set top_type = 0
+        where article_id = #{articleId}
+    </update>
+    <update id="updateByParam">
+        update forum_comment
+        <set>
+            <if test="query.status!=null">
+                status = 1
+            </if>
+        </set>
+        where comment_id in
+        <foreach collection="query.commentIdList" separator="," open="(" close=")" item="commentId">
+            #{commentId}
+        </foreach>
+    </update>
+</mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.ForumArticleAttachmentMapper">
+
+    <resultMap id="BaseResultMap" type="com.easybbs.entity.po.ForumArticleAttachment">
+            <id property="fileId" column="file_id" jdbcType="VARCHAR"/>
+            <result property="articleId" column="article_id" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+            <result property="fileSize" column="file_size" jdbcType="BIGINT"/>
+            <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
+            <result property="downloadCount" column="download_count" jdbcType="INTEGER"/>
+            <result property="filePath" column="file_path" jdbcType="VARCHAR"/>
+            <result property="fileType" column="file_type" jdbcType="TINYINT"/>
+            <result property="integral" column="integral" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        file_id,article_id,user_id,
+        file_size,file_name,download_count,
+        file_path,file_type,integral
+    </sql>
+
+    <select id="selectByArticleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from forum_article_attachment
+        where  article_id = #{articleId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByFileId" resultType="com.easybbs.entity.po.ForumArticleAttachment">
+        select * from forum_article_attachment where file_id = #{fileId}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from forum_article_attachment
+        where  file_id = #{fileId,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert" keyColumn="file_id" keyProperty="fileId" parameterType="com.easybbs.entity.po.ForumArticleAttachment" useGeneratedKeys="true">
+        insert into forum_article_attachment
+        ( file_id,article_id,user_id
+        ,file_size,file_name,download_count
+        ,file_path,file_type,integral
+        )
+        values (#{fileId,jdbcType=VARCHAR},#{articleId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR}
+        ,#{fileSize,jdbcType=BIGINT},#{fileName,jdbcType=VARCHAR},#{downloadCount,jdbcType=INTEGER}
+        ,#{filePath,jdbcType=VARCHAR},#{fileType,jdbcType=TINYINT},#{integral,jdbcType=INTEGER}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="file_id" keyProperty="fileId" parameterType="com.easybbs.entity.po.ForumArticleAttachment" useGeneratedKeys="true">
+        insert into forum_article_attachment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="fileId != null">file_id,</if>
+                <if test="articleId != null">article_id,</if>
+                <if test="userId != null">user_id,</if>
+                <if test="fileSize != null">file_size,</if>
+                <if test="fileName != null">file_name,</if>
+                <if test="downloadCount != null">download_count,</if>
+                <if test="filePath != null">file_path,</if>
+                <if test="fileType != null">file_type,</if>
+                <if test="integral != null">integral,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="fileId != null">#{fileId,jdbcType=VARCHAR},</if>
+                <if test="articleId != null">#{articleId,jdbcType=VARCHAR},</if>
+                <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+                <if test="fileSize != null">#{fileSize,jdbcType=BIGINT},</if>
+                <if test="fileName != null">#{fileName,jdbcType=VARCHAR},</if>
+                <if test="downloadCount != null">#{downloadCount,jdbcType=INTEGER},</if>
+                <if test="filePath != null">#{filePath,jdbcType=VARCHAR},</if>
+                <if test="fileType != null">#{fileType,jdbcType=TINYINT},</if>
+                <if test="integral != null">#{integral,jdbcType=INTEGER},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.easybbs.entity.po.ForumArticleAttachment">
+        update forum_article_attachment
+        <set>
+                <if test="articleId != null">
+                    article_id = #{articleId,jdbcType=VARCHAR},
+                </if>
+                <if test="userId != null">
+                    user_id = #{userId,jdbcType=VARCHAR},
+                </if>
+                <if test="fileSize != null">
+                    file_size = #{fileSize,jdbcType=BIGINT},
+                </if>
+                <if test="fileName != null">
+                    file_name = #{fileName,jdbcType=VARCHAR},
+                </if>
+                <if test="downloadCount != null">
+                    download_count = #{downloadCount,jdbcType=INTEGER},
+                </if>
+                <if test="filePath != null">
+                    file_path = #{filePath,jdbcType=VARCHAR},
+                </if>
+                <if test="fileType != null">
+                    file_type = #{fileType,jdbcType=TINYINT},
+                </if>
+                <if test="integral != null">
+                    integral = #{integral,jdbcType=INTEGER},
+                </if>
+        </set>
+        where   file_id = #{fileId,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.easybbs.entity.po.ForumArticleAttachment">
+        update forum_article_attachment
+        set 
+            article_id =  #{articleId,jdbcType=VARCHAR},
+            user_id =  #{userId,jdbcType=VARCHAR},
+            file_size =  #{fileSize,jdbcType=BIGINT},
+            file_name =  #{fileName,jdbcType=VARCHAR},
+            download_count =  #{downloadCount,jdbcType=INTEGER},
+            file_path =  #{filePath,jdbcType=VARCHAR},
+            file_type =  #{fileType,jdbcType=TINYINT},
+            integral =  #{integral,jdbcType=INTEGER}
+        where   file_id = #{fileId,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateDownloadCount">
+        update forum_article_attachment
+        set download_count = download_count + 1
+        where file_id = #{fileId}
+    </update>
+</mapper>

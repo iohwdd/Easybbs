@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.LikeRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.easybbs.entity.po.LikeRecord">
+        <id property="opId" column="op_id" jdbcType="INTEGER"/>
+        <result property="opType" column="op_type" jdbcType="TINYINT"/>
+        <result property="objectId" column="object_id" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="authorUserId" column="author_user_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        op_id
+        ,op_type,object_id,
+        user_id,create_time,author_user_id
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from like_record
+        where op_id = #{opId,jdbcType=INTEGER}
+    </select>
+    <select id="selectByObjectIdAndUserIdAndOpType" resultType="com.easybbs.entity.po.LikeRecord">
+        select *
+        from like_record
+        where object_id = #{objectId}
+          and user_id = #{userId}
+          and op_type = #{opType}
+    </select>
+    <select id="findCountByParam" resultType="java.lang.Integer">
+        select count(1) from like_record
+        <where>
+            <if test="query.authorUserId">
+                and author_user_id = #{query.authorUserId}
+            </if>
+        </where>
+    </select>
+    <select id="findListByParam" resultType="com.easybbs.entity.po.LikeRecord">
+        select * from like_record
+        <where>
+            <if test="query.userId != null">
+                and user_id = #{query.userId}
+            </if>
+            <if test="query.opType != null">
+                and op_type = #{query.opType}
+            </if>
+        </where>
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from like_record
+        where op_id = #{opId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByObjectIdAndUserIdAndOpType">
+        delete
+        from like_record
+        where object_id = #{objectId}
+          and user_id = #{userId}
+          and op_type = #{opType}
+    </delete>
+    <insert id="insert" keyColumn="op_id" keyProperty="opId" parameterType="com.easybbs.entity.po.LikeRecord"
+            useGeneratedKeys="true">
+        insert into like_record
+        ( op_id, op_type, object_id
+        , user_id, create_time, author_user_id)
+        values ( #{opId,jdbcType=INTEGER}, #{opType,jdbcType=TINYINT}, #{objectId,jdbcType=VARCHAR}
+               , #{userId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{authorUserId,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="op_id" keyProperty="opId" parameterType="com.easybbs.entity.po.LikeRecord"
+            useGeneratedKeys="true">
+        insert into like_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="opId != null">op_id,</if>
+            <if test="opType != null">op_type,</if>
+            <if test="objectId != null">object_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="authorUserId != null">author_user_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="opId != null">#{opId,jdbcType=INTEGER},</if>
+            <if test="opType != null">#{opType,jdbcType=TINYINT},</if>
+            <if test="objectId != null">#{objectId,jdbcType=VARCHAR},</if>
+            <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="authorUserId != null">#{authorUserId,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.easybbs.entity.po.LikeRecord">
+        update like_record
+        <set>
+            <if test="opType != null">
+                op_type = #{opType,jdbcType=TINYINT},
+            </if>
+            <if test="objectId != null">
+                object_id = #{objectId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="authorUserId != null">
+                author_user_id = #{authorUserId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where op_id = #{opId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.easybbs.entity.po.LikeRecord">
+        update like_record
+        set op_type        = #{opType,jdbcType=TINYINT},
+            object_id      = #{objectId,jdbcType=VARCHAR},
+            user_id        = #{userId,jdbcType=VARCHAR},
+            create_time    = #{createTime,jdbcType=TIMESTAMP},
+            author_user_id = #{authorUserId,jdbcType=VARCHAR}
+        where op_id = #{opId,jdbcType=INTEGER}
+    </update>
+</mapper>

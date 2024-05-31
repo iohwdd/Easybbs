@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <import resource="spring-dao.xml" />
+
+    <!--扫描service包(包含子包)下所有使用注解的类型-->
+    <context:component-scan base-package="com.easybbs.service"/>
+    <context:component-scan base-package="com.easybbs.config"/>
+    <context:component-scan base-package="com.easybbs.utils"/>
+
+    <!--配置事务管理器(mybatis采用的是JDBC的事务管理器)-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--配置基于注解的声明式事务,默认使用注解来管理事务行为-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- PageHelper 配置 -->
+    <bean id="pageHelper" class="com.github.pagehelper.PageHelper">
+        <property name="properties">
+            <props>
+                <prop key="helperDialect">mysql</prop>
+                <prop key="reasonable">true</prop>
+                <prop key="supportMethodsArguments">true</prop>
+                <prop key="params">count=countSql</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- 邮件发送配置 -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.qq.com"/>
+        <property name="port" value="465"/>
+        <property name="username" value="2023321332@qq.com"/>
+        <property name="password" value="othtgzfyzwhrbdeb"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.starttls.required">true</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.ForumArticleAttachmentDownloadMapper">
+
+    <resultMap id="BaseResultMap" type="com.easybbs.entity.po.ForumArticleAttachmentDownload">
+            <id property="fileId" column="file_id" jdbcType="VARCHAR"/>
+            <id property="userId" column="user_id" jdbcType="VARCHAR"/>
+            <result property="articleId" column="article_id" jdbcType="VARCHAR"/>
+            <result property="downloadCount" column="download_count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        file_id,user_id,article_id,
+        download_count
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from forum_article_attachment_download
+        where  file_id = #{fileId,jdbcType=VARCHAR} AND user_id = #{userId,jdbcType=VARCHAR} 
+    </select>
+    <select id="selectByFileIdAndUserId" resultType="com.easybbs.entity.po.ForumArticleAttachmentDownload">
+        select * from forum_article_attachment_download where file_id = #{fileId} and user_id = #{userId}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from forum_article_attachment_download
+        where  file_id = #{fileId,jdbcType=VARCHAR} AND user_id = #{userId,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert">
+        insert into forum_article_attachment_download
+        ( file_id,user_id,article_id
+        ,download_count)
+        values (#{fileId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{articleId,jdbcType=VARCHAR}
+        ,#{downloadCount,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective">
+        insert into forum_article_attachment_download
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="fileId != null">file_id,</if>
+                <if test="userId != null">user_id,</if>
+                <if test="articleId != null">article_id,</if>
+                <if test="downloadCount != null">download_count,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="fileId != null">#{fileId,jdbcType=VARCHAR},</if>
+                <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+                <if test="articleId != null">#{articleId,jdbcType=VARCHAR},</if>
+                <if test="downloadCount != null">#{downloadCount,jdbcType=INTEGER},</if>
+        </trim>
+    </insert>
+    <insert id="insertOrUpdate" parameterType="com.easybbs.entity.po.ForumArticleAttachmentDownload">
+        insert into forum_article_attachment_download
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bean.fileId != null">
+                file_id,
+            </if>
+            <if test="bean.userId != null">
+                user_id,
+            </if>
+            <if test="bean.articleId != null">
+                article_id,
+            </if>
+            <if test="bean.downloadCount != null">
+                download_count,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bean.fileId != null">
+                #{bean.fileId},
+            </if>
+            <if test="bean.userId != null">
+                #{bean.userId},
+            </if>
+            <if test="bean.articleId != null">
+                #{bean.articleId},
+            </if>
+            <if test="bean.downloadCount != null">
+                #{bean.downloadCount},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim prefix="" suffix="" suffixOverrides=",">
+            <if test="bean.downloadCount != null">
+                download_count = download_count + 1,
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.easybbs.entity.po.ForumArticleAttachmentDownload">
+        update forum_article_attachment_download
+        <set>
+                <if test="articleId != null">
+                    article_id = #{articleId,jdbcType=VARCHAR},
+                </if>
+                <if test="downloadCount != null">
+                    download_count = #{downloadCount,jdbcType=INTEGER},
+                </if>
+        </set>
+        where   file_id = #{fileId,jdbcType=VARCHAR} AND user_id = #{userId,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.easybbs.entity.po.ForumArticleAttachmentDownload">
+        update forum_article_attachment_download
+        set 
+            article_id =  #{articleId,jdbcType=VARCHAR},
+            download_count =  #{downloadCount,jdbcType=INTEGER}
+        where   file_id = #{fileId,jdbcType=VARCHAR} AND user_id = #{userId,jdbcType=VARCHAR} 
+    </update>
+</mapper>

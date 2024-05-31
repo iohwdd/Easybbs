@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.ForumArticleMapper">
+
+    <resultMap id="BaseResultMap" type="com.easybbs.entity.po.ForumArticle">
+        <id property="articleId" column="article_id" jdbcType="VARCHAR"/>
+        <result property="boardId" column="board_id" jdbcType="INTEGER"/>
+        <result property="boardName" column="board_name" jdbcType="VARCHAR"/>
+        <result property="pBoardId" column="p_board_id" jdbcType="INTEGER"/>
+        <result property="pBoardName" column="p_board_name" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="userIpAddress" column="user_ip_address" jdbcType="VARCHAR"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="cover" column="cover" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="markdownContent" column="markdown_content" jdbcType="VARCHAR"/>
+        <result property="editorType" column="editor_type" jdbcType="TINYINT"/>
+        <result property="summary" column="summary" jdbcType="VARCHAR"/>
+        <result property="postTime" column="post_time" jdbcType="TIMESTAMP"/>
+        <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
+        <result property="readCount" column="read_count" jdbcType="INTEGER"/>
+        <result property="goodCount" column="good_count" jdbcType="INTEGER"/>
+        <result property="commentCount" column="comment_count" jdbcType="INTEGER"/>
+        <result property="topType" column="top_type" jdbcType="TINYINT"/>
+        <result property="attachmentType" column="attachment_type" jdbcType="TINYINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        article_id
+        ,board_id,board_name,
+        p_board_id,p_board_name,user_id,
+        nick_name,user_ip_address,title,
+        cover,content,markdown_content,
+        editor_type,summary,post_time,
+        last_update_time,read_count,good_count,
+        comment_count,top_type,attachment_type,
+        status
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from forum_article
+        where article_id = #{articleId}
+    </select>
+    <select id="selectAll" resultType="com.easybbs.entity.po.ForumArticle">
+        select *
+        from forum_article
+    </select>
+    <select id="selectByWrapper" resultType="com.easybbs.entity.po.ForumArticle">
+        select * from forum_article
+        <where>
+            <if test="boardId != null">
+                AND board_id = #{boardId}
+            </if>
+            <if test="pBoardId != null">
+                AND p_board_id = #{pBoardId}
+            </if>
+            <if test="currentUserId != null">
+                AND status = 1 or (status = 0 and user_id=#{currentUserId})
+            </if>
+            <if test="currentUserId == null">
+                AND status = 1
+            </if>
+        </where>
+        <if test="orderSql != null">
+            order by ${orderSql}
+        </if>
+    </select>
+    <select id="getForumArticleByArticleId" resultType="com.easybbs.entity.po.ForumArticle">
+        select *
+        from forum_article
+        where article_id = #{articleId}
+    </select>
+    <select id="findCountByParam" resultType="java.lang.Integer">
+        select count(1) from forum_article
+        <where>
+            <if test="query.userId != null">
+                and user_id = #{query.userId}
+            </if>
+            <if test="query.status != null">
+                and status = #{query.status}
+            </if>
+
+        </where>
+    </select>
+    <select id="findListByParams" resultType="com.easybbs.entity.po.ForumArticle">
+        SELECT * FROM forum_article
+        <where>
+            <if test="query.userId != null">
+                AND user_id = #{query.userId}
+            </if>
+            <if test="query.status != null">
+                AND status = #{query.status}
+            </if>
+            <if test="query.titleFuzzy != null">
+                AND title LIKE CONCAT('%',#{query.titleFuzzy},'%')
+            </if>
+            <if test="query.nickNameFuzzy != null">
+                AND nick_name LIKE CONCAT('%',#{query.nickNameFuzzy},'%')
+            </if>
+            <if test="query.attachmentType != null">
+                AND attachment_type = #{query.attachmentType}
+            </if>
+            <if test="query.topType != null">
+                AND top_type = #{query.topType}
+            </if>
+            <if test="query.boardId != null">
+                and board_id = #{query.boardId}
+            </if>
+            <if test="query.pBoardId != null">
+                and p_board_id = #{query.pBoardId}
+            </if>
+            <if test="query.articleIdList != null and query.articleIdList.size() > 0">
+                AND article_id IN
+                <foreach collection="query.articleIdList" item="articleId" separator="," open="(" close=")">
+                    #{articleId}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY post_time DESC
+    </select>
+    <select id="selectByKeyword" resultType="com.easybbs.entity.po.ForumArticle">
+        select *
+        from forum_article
+        where title like concat('%', #{keyword}, '%')
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from forum_article
+        where article_id = #{articleId,jdbcType=VARCHAR}
+    </delete>
+    <delete id="delByArticleIds">
+        delete from forum_article
+        where article_id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="insert" keyColumn="article_id" keyProperty="articleId"
+            parameterType="com.easybbs.entity.po.ForumArticle" useGeneratedKeys="true">
+        insert into forum_article
+        ( article_id, board_id, board_name
+        , p_board_id, p_board_name, user_id
+        , nick_name, user_ip_address, title
+        , cover, content, markdown_content
+        , editor_type, summary, post_time
+        , last_update_time, read_count, good_count
+        , comment_count, top_type, attachment_type
+        , status)
+        values ( #{articleId,jdbcType=VARCHAR}, #{boardId,jdbcType=INTEGER}, #{boardName,jdbcType=VARCHAR}
+               , #{pBoardId,jdbcType=INTEGER}, #{pBoardName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}
+               , #{nickName,jdbcType=VARCHAR}, #{userIpAddress,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}
+               , #{cover,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{markdownContent,jdbcType=VARCHAR}
+               , #{editorType,jdbcType=TINYINT}, #{summary,jdbcType=VARCHAR}, #{postTime,jdbcType=TIMESTAMP}
+               , #{lastUpdateTime,jdbcType=TIMESTAMP}, #{readCount,jdbcType=INTEGER}, #{goodCount,jdbcType=INTEGER}
+               , #{commentCount,jdbcType=INTEGER}, #{topType,jdbcType=TINYINT}, #{attachmentType,jdbcType=TINYINT}
+               , #{status,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" keyColumn="article_id" keyProperty="articleId"
+            parameterType="com.easybbs.entity.po.ForumArticle" useGeneratedKeys="true">
+        insert into forum_article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">article_id,</if>
+            <if test="boardId != null">board_id,</if>
+            <if test="boardName != null">board_name,</if>
+            <if test="pBoardId != null">p_board_id,</if>
+            <if test="pBoardName != null">p_board_name,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="nickName != null">nick_name,</if>
+            <if test="userIpAddress != null">user_ip_address,</if>
+            <if test="title != null">title,</if>
+            <if test="cover != null">cover,</if>
+            <if test="content != null">content,</if>
+            <if test="markdownContent != null">markdown_content,</if>
+            <if test="editorType != null">editor_type,</if>
+            <if test="summary != null">summary,</if>
+            <if test="postTime != null">post_time,</if>
+            <if test="lastUpdateTime != null">last_update_time,</if>
+            <if test="readCount != null">read_count,</if>
+            <if test="goodCount != null">good_count,</if>
+            <if test="commentCount != null">comment_count,</if>
+            <if test="topType != null">top_type,</if>
+            <if test="attachmentType != null">attachment_type,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">#{articleId,jdbcType=VARCHAR},</if>
+            <if test="boardId != null">#{boardId,jdbcType=INTEGER},</if>
+            <if test="boardName != null">#{boardName,jdbcType=VARCHAR},</if>
+            <if test="pBoardId != null">#{pBoardId,jdbcType=INTEGER},</if>
+            <if test="pBoardName != null">#{pBoardName,jdbcType=VARCHAR},</if>
+            <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+            <if test="nickName != null">#{nickName,jdbcType=VARCHAR},</if>
+            <if test="userIpAddress != null">#{userIpAddress,jdbcType=VARCHAR},</if>
+            <if test="title != null">#{title,jdbcType=VARCHAR},</if>
+            <if test="cover != null">#{cover,jdbcType=VARCHAR},</if>
+            <if test="content != null">#{content,jdbcType=VARCHAR},</if>
+            <if test="markdownContent != null">#{markdownContent,jdbcType=VARCHAR},</if>
+            <if test="editorType != null">#{editorType,jdbcType=TINYINT},</if>
+            <if test="summary != null">#{summary,jdbcType=VARCHAR},</if>
+            <if test="postTime != null">#{postTime,jdbcType=TIMESTAMP},</if>
+            <if test="lastUpdateTime != null">#{lastUpdateTime,jdbcType=TIMESTAMP},</if>
+            <if test="readCount != null">#{readCount,jdbcType=INTEGER},</if>
+            <if test="goodCount != null">#{goodCount,jdbcType=INTEGER},</if>
+            <if test="commentCount != null">#{commentCount,jdbcType=INTEGER},</if>
+            <if test="topType != null">#{topType,jdbcType=TINYINT},</if>
+            <if test="attachmentType != null">#{attachmentType,jdbcType=TINYINT},</if>
+            <if test="status != null">#{status,jdbcType=TINYINT},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.easybbs.entity.po.ForumArticle">
+        update forum_article
+        <set>
+            <if test="boardId != null">
+                board_id = #{boardId,jdbcType=INTEGER},
+            </if>
+            <if test="boardName != null">
+                board_name = #{boardName,jdbcType=VARCHAR},
+            </if>
+            <if test="pBoardId != null">
+                p_board_id = #{pBoardId,jdbcType=INTEGER},
+            </if>
+            <if test="pBoardName != null">
+                p_board_name = #{pBoardName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="userIpAddress != null">
+                user_ip_address = #{userIpAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="cover != null">
+                cover = #{cover,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="markdownContent != null">
+                markdown_content = #{markdownContent,jdbcType=VARCHAR},
+            </if>
+            <if test="editorType != null">
+                editor_type = #{editorType,jdbcType=TINYINT},
+            </if>
+            <if test="summary != null">
+                summary = #{summary,jdbcType=VARCHAR},
+            </if>
+            <if test="postTime != null">
+                post_time = #{postTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="readCount != null">
+                read_count = #{readCount,jdbcType=INTEGER},
+            </if>
+            <if test="goodCount != null">
+                good_count = #{goodCount,jdbcType=INTEGER},
+            </if>
+            <if test="commentCount != null">
+                comment_count = #{commentCount,jdbcType=INTEGER},
+            </if>
+            <if test="topType != null">
+                top_type = #{topType,jdbcType=TINYINT},
+            </if>
+            <if test="attachmentType != null">
+                attachment_type = #{attachmentType,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where article_id = #{articleId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.easybbs.entity.po.ForumArticle">
+        update forum_article
+        set board_id         = #{boardId,jdbcType=INTEGER},
+            board_name       = #{boardName,jdbcType=VARCHAR},
+            p_board_id       = #{pBoardId,jdbcType=INTEGER},
+            p_board_name     = #{pBoardName,jdbcType=VARCHAR},
+            user_id          = #{userId,jdbcType=VARCHAR},
+            nick_name        = #{nickName,jdbcType=VARCHAR},
+            user_ip_address  = #{userIpAddress,jdbcType=VARCHAR},
+            title            = #{title,jdbcType=VARCHAR},
+            cover            = #{cover,jdbcType=VARCHAR},
+            content          = #{content,jdbcType=VARCHAR},
+            markdown_content = #{markdownContent,jdbcType=VARCHAR},
+            editor_type      = #{editorType,jdbcType=TINYINT},
+            summary          = #{summary,jdbcType=VARCHAR},
+            post_time        = #{postTime,jdbcType=TIMESTAMP},
+            last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+            read_count       = #{readCount,jdbcType=INTEGER},
+            good_count       = #{goodCount,jdbcType=INTEGER},
+            comment_count    = #{commentCount,jdbcType=INTEGER},
+            top_type         = #{topType,jdbcType=TINYINT},
+            attachment_type  = #{attachmentType,jdbcType=TINYINT},
+            status           = #{status,jdbcType=TINYINT}
+        where article_id = #{articleId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateArticleCount">
+        update forum_article
+        <set>
+            <if test="updateType == 0">
+                read_count = read_count + #{number}
+            </if>
+            <if test="updateType == 1">
+                good_count = good_count + #{number}
+            </if>
+            <if test="updateType == 2">
+                comment_count = comment_count + #{number}
+            </if>
+        </set>
+        where article_id = #{articleId}
+    </update>
+    <update id="updateArticleByParam">
+        update forum_article
+        <set>
+            <if test="query.status != null">
+                status = 1,
+            </if>
+            <if test="query.topType!=null">
+                top_type = #{query.topType},
+            </if>
+            <if test="query.boardName!=null">
+                board_name = #{query.boardName},
+            </if>
+            <if test="query.pBoardName!=null">
+                p_board_name = #{query.pBoardName},
+            </if>
+            <if test="query.boardId!=null">
+                board_id = #{query.boardId},
+            </if>
+            <if test="query.pBoardId!=null">
+                p_board_id = #{query.pBoardId},
+            </if>
+        </set>
+        <where>
+            <if test="query.articleIdList != null">
+                and article_id in
+                <foreach collection="query.articleIdList" item="id" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="query.articleId != null">
+                and article_id = #{query.articleId}
+            </if>
+        </where>
+    </update>
+</mapper>

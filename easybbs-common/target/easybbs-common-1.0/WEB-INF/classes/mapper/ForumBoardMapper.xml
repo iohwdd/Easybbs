@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.ForumBoardMapper">
+
+    <resultMap id="BaseResultMap" type="com.easybbs.entity.po.ForumBoard">
+        <id property="boardId" column="board_id" jdbcType="INTEGER"/>
+        <result property="pBoardId" column="p_board_id" jdbcType="INTEGER"/>
+        <result property="boardName" column="board_name" jdbcType="VARCHAR"/>
+        <result property="cover" column="cover" jdbcType="VARCHAR"/>
+        <result property="boardDesc" column="board_desc" jdbcType="VARCHAR"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="postType" column="post_type" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        board_id
+        ,p_board_id,board_name,
+        cover,board_desc,sort,
+        post_type
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from forum_board
+        where board_id = #{boardId,jdbcType=INTEGER}
+    </select>
+    <select id="selectOrderListWithType" resultType="com.easybbs.entity.po.ForumBoard">
+        select * from forum_board
+        <if test="postType != null">
+            where post_type = #{postType}
+        </if>
+        order by sort asc
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from forum_board
+        where board_id = #{boardId,jdbcType=INTEGER}
+    </delete>
+    <delete id="delChildBypBoardId">
+        delete
+        from forum_board
+        where p_board_id = #{boardId}
+    </delete>
+    <insert id="insert" keyColumn="board_id" keyProperty="boardId" parameterType="com.easybbs.entity.po.ForumBoard"
+            useGeneratedKeys="true">
+        insert into forum_board
+        ( board_id, p_board_id, board_name
+        , cover, board_desc, sort
+        , post_type)
+        values ( #{boardId,jdbcType=INTEGER}, #{pBoardId,jdbcType=INTEGER}, #{boardName,jdbcType=VARCHAR}
+               , #{cover,jdbcType=VARCHAR}, #{boardDesc,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}
+               , #{postType,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" keyColumn="board_id" keyProperty="boardId"
+            parameterType="com.easybbs.entity.po.ForumBoard" useGeneratedKeys="true">
+        insert into forum_board
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="boardId != null">board_id,</if>
+            <if test="pBoardId != null">p_board_id,</if>
+            <if test="boardName != null">board_name,</if>
+            <if test="cover != null">cover,</if>
+            <if test="boardDesc != null">board_desc,</if>
+            <if test="sort != null">sort,</if>
+            <if test="postType != null">post_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="boardId != null">#{boardId,jdbcType=INTEGER},</if>
+            <if test="pBoardId != null">#{pBoardId,jdbcType=INTEGER},</if>
+            <if test="boardName != null">#{boardName,jdbcType=VARCHAR},</if>
+            <if test="cover != null">#{cover,jdbcType=VARCHAR},</if>
+            <if test="boardDesc != null">#{boardDesc,jdbcType=VARCHAR},</if>
+            <if test="sort != null">#{sort,jdbcType=INTEGER},</if>
+            <if test="postType != null">#{postType,jdbcType=TINYINT},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.easybbs.entity.po.ForumBoard">
+        update forum_board
+        <set>
+            <if test="pBoardId != null">
+                p_board_id = #{pBoardId,jdbcType=INTEGER},
+            </if>
+            <if test="boardName != null">
+                board_name = #{boardName,jdbcType=VARCHAR},
+            </if>
+            <if test="cover != null">
+                cover = #{cover,jdbcType=VARCHAR},
+            </if>
+            <if test="boardDesc != null">
+                board_desc = #{boardDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="postType != null">
+                post_type = #{postType,jdbcType=TINYINT},
+            </if>
+        </set>
+        where board_id = #{boardId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.easybbs.entity.po.ForumBoard">
+        update forum_board
+        set p_board_id = #{pBoardId,jdbcType=INTEGER},
+            board_name = #{boardName,jdbcType=VARCHAR},
+            cover      = #{cover,jdbcType=VARCHAR},
+            board_desc = #{boardDesc,jdbcType=VARCHAR},
+            sort       = #{sort,jdbcType=INTEGER},
+            post_type  = #{postType,jdbcType=TINYINT}
+        where board_id = #{boardId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByParam">
+        update forum_board
+        <set>
+            <if test="query.boardName != null">
+                board_name = #{query.boardName},
+            </if>
+            <if test="query.boardDesc != null">
+                board_desc = #{query.boardDesc},
+            </if>
+            <if test="query.postType != null">
+                post_type = #{query.postType},
+            </if>
+            <if test="query.coverPath != null">
+                cover = #{query.coverPath},
+            </if>
+            <if test="query.sort != null">
+                sort = #{query.sort}
+            </if>
+        </set>
+        where board_id = #{query.boardId}
+    </update>
+</mapper>
