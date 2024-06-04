@@ -28,6 +28,7 @@ import Message from './utils/Message'
 import Request from '@/utils/Request'
 import Utils from '@/utils/Utils'
 import Confirm from '@/utils/Confirm'
+import { ChatDotRound } from '@element-plus/icons-vue'
 const app = createApp(App)
 app.component('DiaLog', DiaLog)
 app.component('Avatar', Avatar)
@@ -39,6 +40,7 @@ app.component('EditHtml', EditHtml)
 app.component('EditMarkDown', EditMarkDown)
 app.component('CoverUpload', CoverUpload)
 app.component('AttachmentSelector', AttachmentSelector)
+app.component('ChatDotRound', ChatDotRound)
 app.use(router)
 app.use(ElementPlus)
 app.use(store)

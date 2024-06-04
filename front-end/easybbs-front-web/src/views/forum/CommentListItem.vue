@@ -65,6 +65,9 @@
               <el-dropdown-item @click="opTop(commentData)">
                 {{ commentData.topType == 0 ? '设为置顶' : '取消置顶' }}
               </el-dropdown-item>
+              <el-dropdown-item @click="del(commentData.commentId)">
+                删除评论
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -144,7 +147,8 @@ const { proxy } = getCurrentInstance()
 const router = useRouter()
 const api = {
   doLike: '/comment/doLike',
-  changeTopType: '/comment/changeTopType'
+  changeTopType: '/comment/changeTopType',
+  delComment: '/forum/delComment'
 }
 const props = defineProps({
   commentData: {
@@ -221,6 +225,22 @@ const opTop = async (data) => {
   }
   // 通知父组件重新加载评论 -> 置顶/取消置顶 生效
   emit('reloadData')
+}
+//删除
+const del = (commentId) => {
+  proxy.Confirm(`你确定要删除该评论吗？`, async () => {
+    let result = await proxy.Request({
+      url: api.delComment,
+      params: {
+        commentIds: commentId
+      }
+    })
+    if (!result) {
+      return
+    }
+    proxy.Message.success('删除成功')
+    emit('reloadData')
+  })
 }
 </script>
 

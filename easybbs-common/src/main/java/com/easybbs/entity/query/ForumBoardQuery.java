@@ -1,5 +1,7 @@
 package com.easybbs.entity.query;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * @author: iohw
  * @date: 2024/5/28 16:29

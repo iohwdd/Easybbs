@@ -155,6 +155,18 @@
               </template>
             </el-dropdown>
           </div>
+          <!-- 个人信息 -->
+          <div class="chart">
+            <el-badge
+              :value="chartMsgCount"
+              :hidden="chartMsgCount == null || chartMsgCount == 0"
+              class="item"
+            >
+              <el-icon class="chat-dot" @click="toChart">
+                <chat-dot-round />
+              </el-icon>
+            </el-badge>
+          </div>
           <!-- 个人头像 -->
           <div class="user-info">
             <el-dropdown>
@@ -234,7 +246,8 @@ const api = {
   loadBoard: '/board/loadBoard',
   getMessageCount: '/ucenter/getMessageCount',
   logout: '/logout',
-  getSysSetting: '/getSysSetting'
+  getSysSetting: '/getSysSetting',
+  getChartMsgCount: '/chart/getChartMsgCount'
 }
 const showHeader = ref(true)
 const goHome = () => {
@@ -396,7 +409,9 @@ watch(
   () => store.state.loginUserInfo,
   (newVal, oldVal) => {
     if (newVal) {
+      debugger
       loadMessageCount()
+      getChartMsgCount()
     }
   },
   { immediate: true, deep: true }
@@ -435,7 +450,11 @@ const showFooter = ref(false)
 watch(
   () => route.path,
   (newVal, oldVal) => {
-    if (newVal.indexOf('newPost') != -1 || newVal.indexOf('editPost') != -1) {
+    if (
+      newVal.indexOf('newPost') != -1 ||
+      newVal.indexOf('editPost') != -1 ||
+      newVal.indexOf('chart') != -1
+    ) {
       showFooter.value = false
     } else {
       showFooter.value = true
@@ -443,9 +462,51 @@ watch(
   },
   { immediate: true, deep: true }
 )
+// 聊天
+const toChart = () => {
+  router.push('/user/chart')
+}
+// 获取聊天未读消息数量
+const chartMsgCount = ref(null)
+const getChartMsgCount = async () => {
+  let result = await proxy.Request({
+    url: api.getChartMsgCount,
+    params: {
+      currentUserId: userInfo.value.userId
+    }
+  })
+  if (!result) {
+    return
+  }
+  chartMsgCount.value = result.data
+  store.commit('updateChartMsgCount', result.data)
+}
+watch(
+  () => store.state.chartMsgCount,
+  (newVal, oldVal) => {
+    chartMsgCount.value = newVal
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <style lang="scss">
+.chart {
+  display: inline-block;
+  position: relative;
+  margin-right: 20px;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.chat-dot {
+  cursor: pointer;
+  color: gray; /* 设置图标颜色为灰色 */
+  font-size: 24px; /* 设置图标大小，根据需要调整 */
+}
 .header {
   //导航栏
   top: 0px;
@@ -481,7 +542,7 @@ watch(
     }
   }
   .user-info-panel {
-    width: 300px;
+    width: 400px;
     display: flex;
     align-items: center;
     .op-btn {

@@ -13,6 +13,8 @@ export default createStore({
     activeBoardId: 0,
     // 消息数量
     messageCountInfo: {},
+    //私信数量
+    chartMsgCount: {},
     //系统设置
     sysSetting: {}
   },
@@ -37,6 +39,9 @@ export default createStore({
     },
     getMessageCountInfo: (state) => {
       return state.messageCountInfo
+    },
+    getChartMsgCountInfo: (state) => {
+      return state.chartMsgCount
     }
   },
   mutations: {
@@ -57,6 +62,10 @@ export default createStore({
     },
     updateMessageCountInfo: (state, value) => {
       state.messageCountInfo = value
+    },
+    updateChartMsgCount: (state, value) => {
+      debugger
+      state.chartMsgCount = value
     },
     readMessage: (state, value) => {
       state.messageCountInfo.total =

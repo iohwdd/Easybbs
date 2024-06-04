@@ -52,6 +52,11 @@ const router = createRouter({
           path: '/search',
           name: '搜索',
           component: () => import('@/views/Search.vue')
+        },
+        {
+          path: '/user/chart',
+          name: '私信',
+          component: () => import('@/views/ucenter/UcenterChart.vue')
         }
       ]
     },

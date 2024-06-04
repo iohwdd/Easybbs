@@ -9,7 +9,10 @@ import com.easybbs.entity.po.UserIntegralRecord;
 import com.easybbs.entity.po.UserMessage;
 import com.easybbs.entity.query.UserInfoQuery;
 import com.easybbs.entity.vo.PaginationResultVO;
+import com.easybbs.entity.vo.ResponseVO;
+import com.easybbs.entity.vo.web.UserMsgVO;
 import com.easybbs.exception.BusinessException;
+import com.easybbs.mapper.EmailCodeMapper;
 import com.easybbs.mapper.UserInfoMapper;
 import com.easybbs.mapper.UserIntegralRecordMapper;
 import com.easybbs.mapper.UserMessageMapper;
@@ -225,6 +228,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public void updateUserByParam(UserInfoQuery query) {
         userInfoMapper.updateByParam(query);
+    }
+
+    @Override
+    public List<UserMsgVO> getUserListById(List<String> senderIdList) {
+        return userInfoMapper.getUserListById(senderIdList);
     }
 
 

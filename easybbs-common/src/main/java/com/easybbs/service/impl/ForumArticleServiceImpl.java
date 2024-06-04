@@ -2,7 +2,9 @@ package com.easybbs.service.impl;
 
 import com.easybbs.config.AppConfig;
 import com.easybbs.entity.constants.Constants;
+import com.easybbs.entity.dto.SessionWebUserDto;
 import com.easybbs.entity.dto.SysSetting4AuditDto;
+import com.easybbs.entity.dto.SysSettingDto;
 import com.easybbs.entity.enums.*;
 import com.easybbs.entity.po.FileUploadDto;
 import com.easybbs.entity.po.ForumArticle;
@@ -15,6 +17,7 @@ import com.easybbs.mapper.ForumArticleAttachmentMapper;
 import com.easybbs.mapper.ForumArticleMapper;
 import com.easybbs.mapper.ForumBoardMapper;
 import com.easybbs.service.ForumArticleService;
+import com.easybbs.service.ForumBoardService;
 import com.easybbs.service.UserInfoService;
 import com.easybbs.utils.FileUtils;
 import com.easybbs.utils.ImageUtils;
@@ -27,7 +30,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package com.easybbs.controller;
 
 import com.easybbs.entity.vo.ResponseVO;
+import com.easybbs.mapper.ForumBoardMapper;
 import com.easybbs.service.ForumBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

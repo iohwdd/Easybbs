@@ -1,11 +1,16 @@
 package com.easybbs.service;
 
 import com.easybbs.entity.dto.SessionWebUserDto;
+import com.easybbs.entity.enums.UserIntegralChangeTypeEnum;
 import com.easybbs.entity.enums.UserIntegralOperTypeEnum;
 import com.easybbs.entity.po.UserInfo;
 import com.easybbs.entity.query.UserInfoQuery;
+import com.easybbs.entity.vo.ResponseVO;
+import com.easybbs.entity.vo.web.UserMsgVO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author: iohw
@@ -32,4 +37,6 @@ public interface UserInfoService {
     Object getUserByParam(UserInfoQuery query);
 
     void updateUserByParam(UserInfoQuery query);
+
+    List<UserMsgVO> getUserListById(List<String> senderIdList);
 }

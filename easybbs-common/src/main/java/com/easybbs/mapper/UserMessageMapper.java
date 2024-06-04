@@ -13,7 +13,7 @@ import java.util.List;
  * @createDate 2024-05-09 16:56:17
  * @Entity com.easybbs.entity.po.UserMessage
  */
-//@Mapper
+@Mapper
 public interface UserMessageMapper {
 
     int deleteByPrimaryKey(Long id);

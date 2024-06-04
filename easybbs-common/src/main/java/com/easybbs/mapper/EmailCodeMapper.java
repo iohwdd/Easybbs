@@ -1,11 +1,9 @@
 package com.easybbs.mapper;
 
 
-import com.easybbs.config.WebConfig;
 import com.easybbs.entity.po.EmailCode;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
 * @author Administrator
@@ -13,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 * @createDate 2024-05-09 16:56:17
 * @Entity com.easybbs.entity.po.EmailCode
 */
-//@Mapper
+@Mapper
 public interface EmailCodeMapper {
 
     int deleteByPrimaryKey(Long id);

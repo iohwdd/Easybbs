@@ -3,6 +3,7 @@ package com.easybbs.inteceptor;
 import com.easybbs.config.AdminConfig;
 import com.easybbs.entity.constants.Constants;
 import com.easybbs.entity.dto.SessionAdminUserDto;
+import com.easybbs.entity.dto.SessionWebUserDto;
 import com.easybbs.entity.enums.ResponseCodeEnum;
 import com.easybbs.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;

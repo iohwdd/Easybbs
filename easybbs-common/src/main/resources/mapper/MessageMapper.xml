@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easybbs.mapper.MessageMapper">
+    <insert id="insert">
+        insert into messages
+            (sender_id, receiver_id, text, sender_status, receiver_status)
+        values (#{message.senderId}, #{message.receiverId}, #{message.text}, #{message.senderStatus},
+                #{message.receiverStatus})
+    </insert>
+    <update id="updateStatusByCurrentId">
+        update messages
+        set receiver_status = 1
+        where receiver_id = #{currentUserId}
+          and sender_id = #{senderId}
+    </update>
+    <select id="getMessageByReceiverId" resultType="com.easybbs.entity.po.Message">
+        SELECT *
+        FROM messages
+        WHERE receiver_id = #{receiverId}
+    </select>
+    <select id="getMessageByReceiverIdAndSenderId" resultType="com.easybbs.entity.po.Message">
+        select *
+        from messages
+        where (receiver_id = #{receiverId} and sender_id = #{senderId})
+           or (receiver_id = #{senderId} and sender_id = #{receiverId})
+    </select>
+    <select id="getLastMessage" resultType="java.lang.String">
+        select text
+        from messages
+        where (receiver_id = #{receiverId} and sender_id = #{senderId})
+           or (receiver_id = #{senderId} and sender_id = #{receiverId})
+        order by created_time desc limit 1
+    </select>
+    <select id="getNoReadCount" resultType="java.lang.Integer">
+        select count(1)
+        from messages
+        where sender_id = #{senderId}
+          and receiver_id = #{receiverId}
+          and receiver_status = 0
+    </select>
+
+</mapper>

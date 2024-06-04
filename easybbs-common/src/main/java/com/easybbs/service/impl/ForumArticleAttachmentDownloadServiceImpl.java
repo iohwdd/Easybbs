@@ -1,6 +1,5 @@
 package com.easybbs.service.impl;
 
-import com.easybbs.config.WebConfig;
 import com.easybbs.entity.po.ForumArticleAttachmentDownload;
 import com.easybbs.mapper.ForumArticleAttachmentDownloadMapper;
 import com.easybbs.service.ForumArticleAttachmentDownloadService;

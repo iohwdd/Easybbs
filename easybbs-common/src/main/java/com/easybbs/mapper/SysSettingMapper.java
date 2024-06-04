@@ -13,7 +13,7 @@ import java.util.List;
  * @createDate 2024-05-09 16:56:17
  * @Entity com.easybbs.entity.po.SysSetting
  */
-//@Mapper
+@Mapper
 public interface SysSettingMapper {
 
     int deleteByPrimaryKey(Long id);

@@ -3,6 +3,8 @@ package com.easybbs.mapper;
 
 import com.easybbs.entity.po.UserInfo;
 import com.easybbs.entity.query.UserInfoQuery;
+import com.easybbs.entity.vo.web.UserMsgVO;
+import com.easybbs.service.UserInfoService;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,7 +16,7 @@ import java.util.List;
  * @createDate 2024-05-09 16:56:17
  * @Entity com.easybbs.entity.po.UserInfo
  */
-//@Mapper
+@Mapper
 public interface UserInfoMapper {
 
     int deleteByPrimaryKey(Long id);
@@ -54,4 +56,6 @@ public interface UserInfoMapper {
     List<UserInfo> getUserByParam(@Param("query") UserInfoQuery query);
 
     void updateByParam(@Param("query") UserInfoQuery query);
+
+    List<UserMsgVO> getUserListById(@Param("senderIdList") List<String> senderIdList);
 }

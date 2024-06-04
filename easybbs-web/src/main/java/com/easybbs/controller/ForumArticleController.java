@@ -2,7 +2,6 @@ package com.easybbs.controller;
 
 import com.easybbs.annotation.GlobalInterceptor;
 import com.easybbs.annotation.VerifyParam;
-import com.easybbs.config.AppConfig;
 import com.easybbs.config.WebConfig;
 import com.easybbs.entity.constants.Constants;
 import com.easybbs.entity.dto.SessionWebUserDto;
@@ -25,10 +24,7 @@ import com.easybbs.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -66,10 +62,10 @@ public class ForumArticleController extends ABaseController {
     @Autowired
     private ForumArticleMapper forumArticleMapper;
     @Autowired
-    WebConfig webConfig;
+    private WebConfig webConfig;
 
     @RequestMapping("/loadArticle")
-    public ResponseVO loadArticle(HttpSession session, Integer pageNo ,Integer orderType, Integer pBoardId,Integer boardId) {
+    public ResponseVO loadArticle(HttpSession session, Integer boardId, Integer pBoardId, Integer orderType, Integer pageNo) {
         boardId = boardId == null || boardId == 0 ? null : boardId;
 
         SessionWebUserDto sessionWebUserDto = (SessionWebUserDto) session.getAttribute(Constants.SESSION_KEY);

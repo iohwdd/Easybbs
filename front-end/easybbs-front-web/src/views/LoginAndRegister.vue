@@ -490,6 +490,7 @@ const doSubmit = () => {
       dialogConfig.show = false
       proxy.Message.success('登录成功')
       store.commit('updateLoginUserInfo', result.data)
+      sessionStorage.setItem('userInfo', JSON.stringify(result.data))
     } else if (opType.value == 2) {
       //重置密码
       showPanel(1)

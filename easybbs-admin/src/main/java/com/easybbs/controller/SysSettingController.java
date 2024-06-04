@@ -11,6 +11,7 @@ import com.easybbs.mapper.SysSettingMapper;
 import com.easybbs.service.SysSettingService;
 import com.easybbs.utils.JsonUtils;
 import com.easybbs.utils.StringUtils;
+import com.easybbs.utils.SysCacheUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

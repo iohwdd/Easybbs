@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class WebConfig extends AppConfig {
-    @Value("${mail.smtp.username:}")
+    @Value("${spring.mail.username:}")
     private String userName;
     @Value("${admin.emails:}")
     private String adminEmail;

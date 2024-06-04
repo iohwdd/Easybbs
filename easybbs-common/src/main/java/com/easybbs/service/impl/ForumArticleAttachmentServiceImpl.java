@@ -1,5 +1,6 @@
 package com.easybbs.service.impl;
 
+import com.easybbs.entity.constants.Constants;
 import com.easybbs.entity.dto.SessionWebUserDto;
 import com.easybbs.entity.enums.MessageStatusEnum;
 import com.easybbs.entity.enums.MessageTypeEnum;
@@ -9,7 +10,9 @@ import com.easybbs.entity.po.*;
 import com.easybbs.exception.BusinessException;
 import com.easybbs.mapper.*;
 import com.easybbs.service.ForumArticleAttachmentService;
+import com.easybbs.service.ForumArticleService;
 import com.easybbs.service.UserInfoService;
+import com.easybbs.service.UserIntegralRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

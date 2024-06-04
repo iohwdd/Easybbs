@@ -1,5 +1,7 @@
 package com.easybbs.entity.query;
 
+import lombok.Data;
+
 import java.util.List;
 
 /**
@@ -20,26 +22,8 @@ public class ForumArticleQuery {
     private String nickNameFuzzy;
     private Integer attachmentType;// 是否有附件 0:无附件  1:有附件
     private Integer topType;
-    private Integer pageNo;
-    private Integer orderType;
 
     public ForumArticleQuery() {
-    }
-
-    public Integer getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(Integer pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public Integer getOrderType() {
-        return orderType;
-    }
-
-    public void setOrderType(Integer orderType) {
-        this.orderType = orderType;
     }
 
     public Integer getBoardId() {
@@ -136,25 +120,5 @@ public class ForumArticleQuery {
 
     public void setTopType(Integer topType) {
         this.topType = topType;
-    }
-
-    @Override
-    public String toString() {
-        return "ForumArticleQuery{" +
-                "boardId=" + boardId +
-                ", pBoardId=" + pBoardId +
-                ", boardName='" + boardName + '\'' +
-                ", pBoardName='" + pBoardName + '\'' +
-                ", articleId='" + articleId + '\'' +
-                ", userId='" + userId + '\'' +
-                ", status=" + status +
-                ", articleIdList=" + articleIdList +
-                ", titleFuzzy='" + titleFuzzy + '\'' +
-                ", nickNameFuzzy='" + nickNameFuzzy + '\'' +
-                ", attachmentType=" + attachmentType +
-                ", topType=" + topType +
-                ", pageNo=" + pageNo +
-                ", orderType=" + orderType +
-                '}';
     }
 }

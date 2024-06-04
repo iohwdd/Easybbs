@@ -9,6 +9,8 @@ import com.easybbs.entity.vo.web.UserIntegralRecordVO;
 import com.easybbs.mapper.UserIntegralRecordMapper;
 import com.easybbs.service.UserIntegralRecordService;
 import com.easybbs.utils.CopyTools;
+import com.easybbs.utils.StringUtils;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

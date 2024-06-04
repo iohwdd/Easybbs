@@ -1,9 +1,10 @@
 package com.easybbs.entity.po;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 /**
  * 文章信息

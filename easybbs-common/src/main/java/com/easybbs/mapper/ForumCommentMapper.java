@@ -14,7 +14,7 @@ import java.util.List;
  * @createDate 2024-05-09 16:56:17
  * @Entity com.easybbs.entity.po.ForumComment
  */
-//@Mapper
+@Mapper
 public interface ForumCommentMapper {
 
     int deleteByPrimaryKey(Long id);

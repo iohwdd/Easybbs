@@ -49,7 +49,7 @@ instance.interceptors.response.use(
       //登录超时
       setTimeout(() => {
         router.push('/login')
-      }, 1000)
+      }, 500)
       return Promise.reject({ showError: true, msg: responseData.info })
     } else {
       if (errorCallback) {

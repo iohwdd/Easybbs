@@ -2,6 +2,7 @@ package com.easybbs.aspect;
 
 import com.easybbs.annotation.GlobalInterceptor;
 import com.easybbs.annotation.VerifyParam;
+import com.easybbs.entity.constants.Constants;
 import com.easybbs.entity.enums.ResponseCodeEnum;
 import com.easybbs.exception.BusinessException;
 import com.easybbs.utils.StringUtils;
@@ -15,7 +16,11 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

@@ -11,14 +11,17 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.6.8",
     "element-plus": "^2.7.1",
+    "express": "^4.19.2",
     "js-md5": "^0.8.3",
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
     "vue": "^3.4.21",
     "vue-cookies": "^1.8.4",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "ws": "^8.17.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",

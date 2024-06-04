@@ -4,10 +4,7 @@ import com.easybbs.annotation.GlobalInterceptor;
 import com.easybbs.annotation.VerifyParam;
 import com.easybbs.entity.constants.Constants;
 import com.easybbs.entity.dto.SessionWebUserDto;
-import com.easybbs.entity.enums.CommentTopTypeEnum;
-import com.easybbs.entity.enums.OperRecordTypeEnum;
-import com.easybbs.entity.enums.PageSize;
-import com.easybbs.entity.enums.ResponseCodeEnum;
+import com.easybbs.entity.enums.*;
 import com.easybbs.entity.po.ForumComment;
 import com.easybbs.entity.po.LikeRecord;
 import com.easybbs.entity.query.ForumCommentQuery;
@@ -15,6 +12,7 @@ import com.easybbs.entity.vo.ResponseVO;
 import com.easybbs.exception.BusinessException;
 import com.easybbs.service.ForumCommentService;
 import com.easybbs.service.LikeRecordService;
+import com.easybbs.utils.FileUtils;
 import com.easybbs.utils.SysCacheUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.util.List;
 
 /**
