@@ -30,4 +30,6 @@ public interface ForumArticleService {
     void delByArticleId(@Param("ids") String[] ids);
 
     void updateArticleByParam(ForumArticleQuery query);
+
+    void delComment(String userId, String commendIds);
 }

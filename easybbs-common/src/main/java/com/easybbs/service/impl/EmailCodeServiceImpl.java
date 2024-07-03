@@ -1,7 +1,6 @@
 package com.easybbs.service.impl;
 
 import com.easybbs.config.WebConfig;
-import com.easybbs.entity.constants.Constants;
 import com.easybbs.entity.dto.SysSetting4EmailDto;
 import com.easybbs.entity.po.EmailCode;
 import com.easybbs.entity.po.UserInfo;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.internet.MimeMessage;
-
 import java.util.Date;
 import java.util.Objects;
 

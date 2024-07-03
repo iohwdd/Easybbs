@@ -1,7 +1,8 @@
 package com.easybbs.entity.po;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 文件信息

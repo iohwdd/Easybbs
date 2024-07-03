@@ -3,8 +3,6 @@ package com.easybbs.entity.po;
 import java.io.Serializable;
 import java.util.List;
 
-import lombok.Data;
-
 /**
  * 文章板块信息
  *

@@ -1,6 +1,7 @@
 package com.easybbs.utils;
 
 import com.easybbs.config.AppConfig;
+import com.easybbs.config.WebConfig;
 import com.easybbs.entity.constants.Constants;
 import com.easybbs.entity.enums.FileUploadTypeEnum;
 import com.easybbs.entity.po.FileUploadDto;

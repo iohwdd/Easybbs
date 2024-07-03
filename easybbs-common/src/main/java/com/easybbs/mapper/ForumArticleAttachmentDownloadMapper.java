@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
 * @createDate 2024-05-09 16:56:17
 * @Entity com.easybbs.entity.po.ForumArticleAttachmentDownload
 */
-@Mapper
+//@Mapper
 public interface ForumArticleAttachmentDownloadMapper {
 
     int deleteByPrimaryKey(Long id);

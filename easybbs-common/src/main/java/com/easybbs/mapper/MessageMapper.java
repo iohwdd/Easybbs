@@ -1,7 +1,6 @@
 package com.easybbs.mapper;
 
 import com.easybbs.entity.po.Message;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
  * @date: 2024/6/3 21:29
  * @description:
  */
-@Mapper
 public interface MessageMapper {
     List<Message> getMessageByReceiverIdAndSenderId(@Param("senderId") String senderId, @Param("receiverId") String receiverId);
 

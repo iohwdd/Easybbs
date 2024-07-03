@@ -1,8 +1,9 @@
 package com.easybbs.entity.po;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 点赞记录

@@ -59,6 +59,13 @@
             </if>
         </where>
     </select>
+    <select id="getUserListById" resultType="com.easybbs.entity.vo.web.UserMsgVO">
+        select * from user_info
+        where user_id in
+        <foreach collection="senderIdList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

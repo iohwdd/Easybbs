@@ -44,7 +44,7 @@ public class SysSettingServiceImpl implements SysSettingService {
                 String code = sysSetting.getCode();
                 SysSettingCodeEnum sysSettingCodeEnum = SysSettingCodeEnum.getByCode(code);
                 // 反射
-                PropertyDescriptor pd = new PropertyDescriptor(sysSettingCodeEnum.getPropName(), SysSettingDto.class);
+                PropertyDescriptor pd = new PropertyDescriptor((String)sysSettingCodeEnum.getPropName(), SysSettingDto.class);
                 Method method = pd.getWriteMethod();// set方法
                 Class subClassz = Class.forName(sysSettingCodeEnum.getClassz());// 子系统设置的字节码
                 // 形参: 调用者 调用参数

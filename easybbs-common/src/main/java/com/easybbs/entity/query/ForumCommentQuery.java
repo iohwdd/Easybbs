@@ -1,7 +1,5 @@
 package com.easybbs.entity.query;
 
-import lombok.Data;
-
 import java.util.List;
 
 /**

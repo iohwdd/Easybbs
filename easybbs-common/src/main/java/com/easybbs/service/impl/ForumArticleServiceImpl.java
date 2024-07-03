@@ -2,22 +2,17 @@ package com.easybbs.service.impl;
 
 import com.easybbs.config.AppConfig;
 import com.easybbs.entity.constants.Constants;
-import com.easybbs.entity.dto.SessionWebUserDto;
 import com.easybbs.entity.dto.SysSetting4AuditDto;
-import com.easybbs.entity.dto.SysSettingDto;
 import com.easybbs.entity.enums.*;
-import com.easybbs.entity.po.FileUploadDto;
-import com.easybbs.entity.po.ForumArticle;
-import com.easybbs.entity.po.ForumArticleAttachment;
-import com.easybbs.entity.po.ForumBoard;
+import com.easybbs.entity.po.*;
 import com.easybbs.entity.query.ForumArticleQuery;
 import com.easybbs.entity.vo.PaginationResultVO;
 import com.easybbs.exception.BusinessException;
 import com.easybbs.mapper.ForumArticleAttachmentMapper;
 import com.easybbs.mapper.ForumArticleMapper;
 import com.easybbs.mapper.ForumBoardMapper;
+import com.easybbs.mapper.ForumCommentMapper;
 import com.easybbs.service.ForumArticleService;
-import com.easybbs.service.ForumBoardService;
 import com.easybbs.service.UserInfoService;
 import com.easybbs.utils.FileUtils;
 import com.easybbs.utils.ImageUtils;
@@ -30,9 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +40,8 @@ public class ForumArticleServiceImpl implements ForumArticleService {
     ForumArticleMapper forumArticleMapper;
     @Autowired
     ForumBoardMapper forumBoardMapper;
+    @Autowired
+    ForumCommentMapper forumCommentMapper;
     @Autowired
     FileUtils fileUtils;
     @Autowired
@@ -259,6 +254,21 @@ public class ForumArticleServiceImpl implements ForumArticleService {
         }
         query.setpBoardName(pBoard.getBoardName());
         forumArticleMapper.updateArticleByParam(query);
+    }
+
+    @Override
+    public void delComment(String userId, String commentIds) {
+        ForumComment comment = forumCommentMapper.selectByPrimaryKey(Long.valueOf(commentIds));
+        if(comment == null) {
+            throw new BusinessException(ResponseCodeEnum.CODE_600);
+        }
+        String articleId = comment.getArticleId();
+        String authorId = forumArticleMapper.getForumArticleByArticleId(articleId).getUserId();
+        if(!userId.equals(authorId)) {
+            throw new BusinessException(ResponseCodeEnum.CODE_600);
+        }
+        forumCommentMapper.delByCommentIds(new String[] {commentIds});
+
     }
 
     private void resetBoardInfo(Boolean isAdmin, ForumArticle forumArticle) {

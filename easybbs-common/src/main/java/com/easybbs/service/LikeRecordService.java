@@ -3,7 +3,6 @@ package com.easybbs.service;
 import com.easybbs.entity.enums.OperRecordTypeEnum;
 import com.easybbs.entity.po.LikeRecord;
 import com.easybbs.entity.query.LikeRecordQuery;
-import com.easybbs.entity.vo.PaginationResultVO;
 
 import java.util.List;
 
